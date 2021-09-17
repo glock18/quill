@@ -35,9 +35,10 @@ import ColorPicker from './ui/color-picker';
 import IconPicker from './ui/icon-picker';
 import Tooltip from './ui/tooltip';
 
-import BubbleTheme from './themes/bubble';
-import SnowTheme from './themes/snow';
-
+import BubbleTheme, { BubbleTooltip } from './themes/bubble';
+import SnowTheme, { SnowTooltip } from './themes/snow';
+// import BubbleTheme from './themes/bubble';
+// import SnowTheme from './themes/snow';
 
 Quill.register({
   'attributors/attribute/direction': DirectionAttribute,
@@ -92,6 +93,9 @@ Quill.register({
 
   'themes/bubble': BubbleTheme,
   'themes/snow': SnowTheme,
+
+  'themes/bubble/tooltip': BubbleTooltip,
+  'themes/snow/tooltip': SnowTooltip,
 
   'ui/icons': Icons,
   'ui/picker': Picker,
