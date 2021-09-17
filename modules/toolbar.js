@@ -48,6 +48,11 @@ class Toolbar extends Module {
     this.handlers[format] = handler;
   }
 
+  executeHandler(format, value) {
+    let fn = this.handlers[format].action || this.handlers[format];
+    return fn.call(this, value);
+  }
+
   attach(input) {
     let format = Array.from(input.classList).find(className => {
       return className.indexOf('ql-') === 0;
@@ -86,7 +91,7 @@ class Toolbar extends Module {
       this.quill.focus();
       const [range] = this.quill.selection.getRange();
       if (this.handlers[format] != null) {
-        this.handlers[format].call(this, value);
+        this.executeHandler(format, value);
       } else if (
         this.quill.scroll.query(format).prototype instanceof EmbedBlot
       ) {
@@ -108,9 +113,10 @@ class Toolbar extends Module {
   }
 
   update(range) {
-    const formats = range == null ? {} : this.quill.getFormat(range);
-    this.controls.forEach(pair => {
-      const [format, input] = pair;
+    let formats = range == null ? {} : this.quill.getFormat(range);
+    let toolbar = this;
+    this.controls.forEach(function(pair) {
+      let [format, input] = pair;
       if (input.tagName === 'SELECT') {
         let option;
         if (range == null) {
@@ -142,9 +148,30 @@ class Toolbar extends Module {
           (formats[format] == null && !input.getAttribute('value'));
         input.classList.toggle('ql-active', isActive);
       } else {
-        input.classList.toggle('ql-active', formats[format] != null);
+        if (range == null) {
+          input.classList.remove('ql-active');
+        } else {
+          let isActive = isHandlerActive(format, input);
+          input.classList.toggle('ql-active', isActive);
+        }
       }
-    });
+
+      function isHandlerActive(format, input) {
+        if (toolbar.handlers[format] && toolbar.handlers[format].isActive) {
+          return toolbar.handlers[format].isActive(formats);
+        }
+
+        if (input.hasAttribute('value')) {
+          // both being null should match (default values)
+          // '1' should match with 1 (headers)
+          return formats[format] === input.getAttribute('value') ||
+            (formats[format] != null && formats[format].toString() === input.getAttribute('value')) ||
+            (formats[format] == null && !input.getAttribute('value'));
+        } else {
+          return formats[format] != null;
+        }
+      }
+    }, this);
   }
 }
 Toolbar.DEFAULTS = {};

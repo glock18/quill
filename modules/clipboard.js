@@ -14,7 +14,7 @@ import Module from '../core/module';
 
 import { AlignAttribute, AlignStyle } from '../formats/align';
 import { BackgroundStyle } from '../formats/background';
-import CodeBlock from '../formats/code';
+// import CodeBlock from '../formats/code';
 import { ColorStyle } from '../formats/color';
 import { DirectionAttribute, DirectionStyle } from '../formats/direction';
 import { FontStyle } from '../formats/font';
@@ -80,15 +80,15 @@ class Clipboard extends Module {
   }
 
   convert({ html, text }, formats = {}) {
-    if (formats[CodeBlock.blotName]) {
-      return new Delta().insert(text, {
-        [CodeBlock.blotName]: formats[CodeBlock.blotName],
-      });
-    }
+    // if (formats[CodeBlock.blotName]) {
+    //   return new Delta().insert(text, {
+    //     [CodeBlock.blotName]: formats[CodeBlock.blotName],
+    //   });
+    // }
     if (!html) {
       return new Delta().insert(text || '');
     }
-    const delta = this.convertHTML(html);
+    const delta = this.convertHTML(html.replace(/\>\r?\n +\</g, '><'));
     // Remove trailing newline
     if (
       deltaEndsWith(delta, '\n') &&
@@ -117,7 +117,7 @@ class Clipboard extends Module {
   }
 
   dangerouslyPasteHTML(index, html, source = Quill.sources.API) {
-    if (typeof index === 'string') {
+  if (typeof index === 'string') {
       const delta = this.convert({ html: index, text: '' });
       this.quill.setContents(delta, html);
       this.quill.setSelection(0, Quill.sources.SILENT);

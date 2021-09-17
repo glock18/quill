@@ -8,13 +8,30 @@ ListContainer.tagName = 'OL';
 
 class ListItem extends Block {
   static create(value) {
+    const isOrderedList = typeof value === 'string' && value.indexOf('ordered') === 0;
+    const start = isOrderedList ? value.split(',').pop() : null;
     const node = super.create();
     node.setAttribute('data-list', value);
+
+    if (start) {
+      node.setAttribute('start', start);
+    }
     return node;
   }
 
   static formats(domNode) {
-    return domNode.getAttribute('data-list') || undefined;
+    // return domNode.getAttribute('data-list') || undefined;
+    if (domNode.parentNode && domNode.parentNode.tagName === 'OL') {
+      return 'ordered' + (domNode.hasAttribute('start') ? ',' + domNode.getAttribute('start') : '')
+    }
+    if (domNode.parentNode && domNode.parentNode.tagName === 'UL') {
+      if (domNode.hasAttribute('data-checked')) {
+        return domNode.getAttribute('data-checked') === 'true' ? 'checked' : 'unchecked';
+      } else {
+        return 'bullet';
+      }
+    }
+    return undefined;
   }
 
   static register() {
@@ -52,6 +69,6 @@ ListItem.blotName = 'list';
 ListItem.tagName = 'LI';
 
 ListContainer.allowedChildren = [ListItem];
-ListItem.requiredContainer = ListContainer;
+// ListItem.requiredContainer = ListContainer;
 
 export { ListContainer, ListItem as default };

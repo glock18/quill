@@ -60,12 +60,8 @@ class BaseTheme extends Theme {
         document.body.removeEventListener('click', listener);
         return;
       }
-      if (
-        this.tooltip != null &&
-        !this.tooltip.root.contains(e.target) &&
-        document.activeElement !== this.tooltip.textbox &&
-        !this.quill.hasFocus()
-      ) {
+      if (this.tooltip != null && !this.tooltip.root.contains(e.target) &&
+        !(this.tooltip.textbox && document.activeElement === this.tooltip.textbox) && !this.quill.hasFocus()) {
         this.tooltip.hide();
       }
       if (this.pickers != null) {
@@ -195,15 +191,17 @@ class BaseTooltip extends Tooltip {
   }
 
   listen() {
-    this.textbox.addEventListener('keydown', event => {
-      if (event.key === 'Enter') {
-        this.save();
-        event.preventDefault();
-      } else if (event.key === 'Escape') {
-        this.cancel();
-        event.preventDefault();
-      }
-    });
+    if (this.textbox) {
+      this.textbox.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          this.save();
+          event.preventDefault();
+        } else if (event.key === 'Escape') {
+          this.cancel();
+          event.preventDefault();
+        }
+      });
+    }
   }
 
   cancel() {
@@ -213,17 +211,17 @@ class BaseTooltip extends Tooltip {
   edit(mode = 'link', preview = null) {
     this.root.classList.remove('ql-hidden');
     this.root.classList.add('ql-editing');
-    if (preview != null) {
-      this.textbox.value = preview;
-    } else if (mode !== this.root.getAttribute('data-mode')) {
-      this.textbox.value = '';
-    }
     this.position(this.quill.getBounds(this.quill.selection.savedRange));
-    this.textbox.select();
-    this.textbox.setAttribute(
-      'placeholder',
-      this.textbox.getAttribute(`data-${mode}`) || '',
-    );
+
+    if (this.textbox) {
+      if (preview != null) {
+        this.textbox.value = preview;
+      } else if (mode !== this.root.getAttribute('data-mode')) {
+        this.textbox.value = '';
+      }
+      this.textbox.select();
+      this.textbox.setAttribute('placeholder', this.textbox.getAttribute(`data-${mode}`) || '');
+    }
     this.root.setAttribute('data-mode', mode);
   }
 
@@ -233,9 +231,11 @@ class BaseTooltip extends Tooltip {
     this.quill.scrollingContainer.scrollTop = scrollTop;
   }
 
-  save() {
-    let { value } = this.textbox;
-    switch (this.root.getAttribute('data-mode')) {
+  save(value) {
+    if (value === undefined && this.textbox) {
+      value = this.textbox.value;
+    }
+    switch(this.root.getAttribute('data-mode')) {
       case 'link': {
         const { scrollTop } = this.quill.root;
         if (this.linkRange) {
@@ -276,7 +276,9 @@ class BaseTooltip extends Tooltip {
       }
       default:
     }
-    this.textbox.value = '';
+    if (this.textbox) {
+      this.textbox.value = '';
+    }
     this.hide();
   }
 }

@@ -129,4 +129,4 @@ SnowTheme.DEFAULTS = merge({}, BaseTheme.DEFAULTS, {
   },
 });
 
-export default SnowTheme;
+export { SnowTooltip, SnowTheme as default };
