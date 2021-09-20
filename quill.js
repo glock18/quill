@@ -35,6 +35,7 @@ import ColorPicker from './ui/color-picker';
 import IconPicker from './ui/icon-picker';
 import Tooltip from './ui/tooltip';
 
+import BaseTheme, { BaseTooltip } from './themes/base';
 import BubbleTheme, { BubbleTooltip } from './themes/bubble';
 import SnowTheme, { SnowTooltip } from './themes/snow';
 // import BubbleTheme from './themes/bubble';
@@ -91,9 +92,11 @@ Quill.register({
   'modules/syntax': Syntax,
   'modules/toolbar': Toolbar,
 
+  'themes/base': BaseTheme,
   'themes/bubble': BubbleTheme,
   'themes/snow': SnowTheme,
 
+  'themes/base/tooltip': BaseTooltip,
   'themes/bubble/tooltip': BubbleTooltip,
   'themes/snow/tooltip': SnowTooltip,
 
