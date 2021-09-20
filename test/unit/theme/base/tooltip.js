@@ -59,9 +59,9 @@ describe('BaseTooltip', function() {
     });
 
     function insertVideo(tooltip, url) {
-      tooltip.textbox.value = url;
+      // tooltip.textbox.value = url;
       tooltip.root.setAttribute('data-mode', 'video');
-      tooltip.save();
+      tooltip.save(url);
     }
   });
 });

@@ -6964,7 +6964,7 @@ var BaseTheme = function (_Theme) {
       if (!document.body.contains(quill.root)) {
         return document.body.removeEventListener('click', listener);
       }
-      if (_this.tooltip != null && !_this.tooltip.root.contains(e.target) && document.activeElement !== _this.tooltip.textbox && !_this.quill.hasFocus()) {
+      if (_this.tooltip != null && !_this.tooltip.root.contains(e.target) && !(_this.tooltip.textbox && document.activeElement === _this.tooltip.textbox) && !_this.quill.hasFocus()) {
         _this.tooltip.hide();
       }
       if (_this.pickers != null) {
@@ -7110,15 +7110,17 @@ var BaseTooltip = function (_Tooltip) {
     value: function listen() {
       var _this5 = this;
 
-      this.textbox.addEventListener('keydown', function (event) {
-        if (_keyboard2.default.match(event, 'enter')) {
-          _this5.save();
-          event.preventDefault();
-        } else if (_keyboard2.default.match(event, 'escape')) {
-          _this5.cancel();
-          event.preventDefault();
-        }
-      });
+      if (this.textbox) {
+        this.textbox.addEventListener('keydown', function (event) {
+          if (_keyboard2.default.match(event, 'enter')) {
+            _this5.save();
+            event.preventDefault();
+          } else if (_keyboard2.default.match(event, 'escape')) {
+            _this5.cancel();
+            event.preventDefault();
+          }
+        });
+      }
     }
   }, {
     key: 'cancel',
@@ -7133,14 +7135,17 @@ var BaseTooltip = function (_Tooltip) {
 
       this.root.classList.remove('ql-hidden');
       this.root.classList.add('ql-editing');
-      if (preview != null) {
-        this.textbox.value = preview;
-      } else if (mode !== this.root.getAttribute('data-mode')) {
-        this.textbox.value = '';
-      }
       this.position(this.quill.getBounds(this.quill.selection.savedRange));
-      this.textbox.select();
-      this.textbox.setAttribute('placeholder', this.textbox.getAttribute('data-' + mode) || '');
+
+      if (this.textbox) {
+        if (preview != null) {
+          this.textbox.value = preview;
+        } else if (mode !== this.root.getAttribute('data-mode')) {
+          this.textbox.value = '';
+        }
+        this.textbox.select();
+        this.textbox.setAttribute('placeholder', this.textbox.getAttribute('data-' + mode) || '');
+      }
       this.root.setAttribute('data-mode', mode);
     }
   }, {
@@ -7152,8 +7157,10 @@ var BaseTooltip = function (_Tooltip) {
     }
   }, {
     key: 'save',
-    value: function save() {
-      var value = this.textbox.value;
+    value: function save(value) {
+      if (value === undefined && this.textbox) {
+        value = this.textbox.value;
+      }
       switch (this.root.getAttribute('data-mode')) {
         case 'link':
           {
@@ -7188,7 +7195,9 @@ var BaseTooltip = function (_Tooltip) {
           }
         default:
       }
-      this.textbox.value = '';
+      if (this.textbox) {
+        this.textbox.value = '';
+      }
       this.hide();
     }
   }]);
@@ -12668,7 +12677,7 @@ var BubbleTooltip = function (_BaseTooltip) {
           var _bounds = _this2.quill.getBounds(new _selection.Range(index, length));
           _this2.position(_bounds);
         }
-      } else if (document.activeElement !== _this2.textbox && _this2.quill.hasFocus()) {
+      } else if (!(_this2.textbox && document.activeElement === _this2.textbox) && _this2.quill.hasFocus()) {
         _this2.hide();
       }
     });
