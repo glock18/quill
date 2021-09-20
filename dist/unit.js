@@ -5835,7 +5835,7 @@ var _cursor = __webpack_require__(28);
 
 var _cursor2 = _interopRequireDefault(_cursor);
 
-var _embed = __webpack_require__(48);
+var _embed = __webpack_require__(49);
 
 var _embed2 = _interopRequireDefault(_embed);
 
@@ -5855,7 +5855,7 @@ var _clipboard = __webpack_require__(77);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
-var _history = __webpack_require__(55);
+var _history = __webpack_require__(56);
 
 var _history2 = _interopRequireDefault(_history);
 
@@ -6892,533 +6892,6 @@ exports.default = Theme;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-var _text = __webpack_require__(7);
-
-var _text2 = _interopRequireDefault(_text);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var GUARD_TEXT = '\uFEFF';
-
-var Embed = function (_Parchment$Embed) {
-  _inherits(Embed, _Parchment$Embed);
-
-  function Embed(node) {
-    _classCallCheck(this, Embed);
-
-    var _this = _possibleConstructorReturn(this, (Embed.__proto__ || Object.getPrototypeOf(Embed)).call(this, node));
-
-    _this.contentNode = document.createElement('span');
-    _this.contentNode.setAttribute('contenteditable', false);
-    [].slice.call(_this.domNode.childNodes).forEach(function (childNode) {
-      _this.contentNode.appendChild(childNode);
-    });
-    _this.leftGuard = document.createTextNode(GUARD_TEXT);
-    _this.rightGuard = document.createTextNode(GUARD_TEXT);
-    _this.domNode.appendChild(_this.leftGuard);
-    _this.domNode.appendChild(_this.contentNode);
-    _this.domNode.appendChild(_this.rightGuard);
-    return _this;
-  }
-
-  _createClass(Embed, [{
-    key: 'index',
-    value: function index(node, offset) {
-      if (node === this.leftGuard) return 0;
-      if (node === this.rightGuard) return 1;
-      return _get(Embed.prototype.__proto__ || Object.getPrototypeOf(Embed.prototype), 'index', this).call(this, node, offset);
-    }
-  }, {
-    key: 'restore',
-    value: function restore(node) {
-      var range = void 0,
-          textNode = void 0;
-      var text = node.data.split(GUARD_TEXT).join('');
-      if (node === this.leftGuard) {
-        if (this.prev instanceof _text2.default) {
-          var prevLength = this.prev.length();
-          this.prev.insertAt(prevLength, text);
-          range = {
-            startNode: this.prev.domNode,
-            startOffset: prevLength + text.length
-          };
-        } else {
-          textNode = document.createTextNode(text);
-          this.parent.insertBefore(_parchment2.default.create(textNode), this);
-          range = {
-            startNode: textNode,
-            startOffset: text.length
-          };
-        }
-      } else if (node === this.rightGuard) {
-        if (this.next instanceof _text2.default) {
-          this.next.insertAt(0, text);
-          range = {
-            startNode: this.next.domNode,
-            startOffset: text.length
-          };
-        } else {
-          textNode = document.createTextNode(text);
-          this.parent.insertBefore(_parchment2.default.create(textNode), this.next);
-          range = {
-            startNode: textNode,
-            startOffset: text.length
-          };
-        }
-      }
-      node.data = GUARD_TEXT;
-      return range;
-    }
-  }, {
-    key: 'update',
-    value: function update(mutations, context) {
-      var _this2 = this;
-
-      mutations.forEach(function (mutation) {
-        if (mutation.type === 'characterData' && (mutation.target === _this2.leftGuard || mutation.target === _this2.rightGuard)) {
-          var range = _this2.restore(mutation.target);
-          if (range) context.range = range;
-        }
-      });
-    }
-  }]);
-
-  return Embed;
-}(_parchment2.default.Embed);
-
-exports.default = Embed;
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AlignStyle = exports.AlignClass = exports.AlignAttribute = undefined;
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var config = {
-  scope: _parchment2.default.Scope.BLOCK,
-  whitelist: ['right', 'center', 'justify']
-};
-
-var AlignAttribute = new _parchment2.default.Attributor.Attribute('align', 'align', config);
-var AlignClass = new _parchment2.default.Attributor.Class('align', 'ql-align', config);
-var AlignStyle = new _parchment2.default.Attributor.Style('align', 'text-align', config);
-
-exports.AlignAttribute = AlignAttribute;
-exports.AlignClass = AlignClass;
-exports.AlignStyle = AlignStyle;
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BackgroundStyle = exports.BackgroundClass = undefined;
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-var _color = __webpack_require__(30);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var BackgroundClass = new _parchment2.default.Attributor.Class('background', 'ql-bg', {
-  scope: _parchment2.default.Scope.INLINE
-});
-var BackgroundStyle = new _color.ColorAttributor('background', 'background-color', {
-  scope: _parchment2.default.Scope.INLINE
-});
-
-exports.BackgroundClass = BackgroundClass;
-exports.BackgroundStyle = BackgroundStyle;
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.DirectionStyle = exports.DirectionClass = exports.DirectionAttribute = undefined;
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var config = {
-  scope: _parchment2.default.Scope.BLOCK,
-  whitelist: ['rtl']
-};
-
-var DirectionAttribute = new _parchment2.default.Attributor.Attribute('direction', 'dir', config);
-var DirectionClass = new _parchment2.default.Attributor.Class('direction', 'ql-direction', config);
-var DirectionStyle = new _parchment2.default.Attributor.Style('direction', 'direction', config);
-
-exports.DirectionAttribute = DirectionAttribute;
-exports.DirectionClass = DirectionClass;
-exports.DirectionStyle = DirectionStyle;
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.FontClass = exports.FontStyle = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var config = {
-  scope: _parchment2.default.Scope.INLINE,
-  whitelist: ['serif', 'monospace']
-};
-
-var FontClass = new _parchment2.default.Attributor.Class('font', 'ql-font', config);
-
-var FontStyleAttributor = function (_Parchment$Attributor) {
-  _inherits(FontStyleAttributor, _Parchment$Attributor);
-
-  function FontStyleAttributor() {
-    _classCallCheck(this, FontStyleAttributor);
-
-    return _possibleConstructorReturn(this, (FontStyleAttributor.__proto__ || Object.getPrototypeOf(FontStyleAttributor)).apply(this, arguments));
-  }
-
-  _createClass(FontStyleAttributor, [{
-    key: 'value',
-    value: function value(node) {
-      return _get(FontStyleAttributor.prototype.__proto__ || Object.getPrototypeOf(FontStyleAttributor.prototype), 'value', this).call(this, node).replace(/["']/g, '');
-    }
-  }]);
-
-  return FontStyleAttributor;
-}(_parchment2.default.Attributor.Style);
-
-var FontStyle = new FontStyleAttributor('font', 'font-family', config);
-
-exports.FontStyle = FontStyle;
-exports.FontClass = FontClass;
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SizeStyle = exports.SizeClass = undefined;
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SizeClass = new _parchment2.default.Attributor.Class('size', 'ql-size', {
-  scope: _parchment2.default.Scope.INLINE,
-  whitelist: ['small', 'large', 'huge']
-});
-var SizeStyle = new _parchment2.default.Attributor.Style('size', 'font-size', {
-  scope: _parchment2.default.Scope.INLINE,
-  whitelist: ['10px', '18px', '32px']
-});
-
-exports.SizeClass = SizeClass;
-exports.SizeStyle = SizeStyle;
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-  'align': {
-    '': __webpack_require__(98),
-    'center': __webpack_require__(99),
-    'right': __webpack_require__(100),
-    'justify': __webpack_require__(101)
-  },
-  'background': __webpack_require__(102),
-  'blockquote': __webpack_require__(103),
-  'bold': __webpack_require__(104),
-  'clean': __webpack_require__(105),
-  'code': __webpack_require__(80),
-  'code-block': __webpack_require__(80),
-  'color': __webpack_require__(106),
-  'direction': {
-    '': __webpack_require__(107),
-    'rtl': __webpack_require__(108)
-  },
-  'float': {
-    'center': __webpack_require__(109),
-    'full': __webpack_require__(110),
-    'left': __webpack_require__(111),
-    'right': __webpack_require__(112)
-  },
-  'formula': __webpack_require__(113),
-  'header': {
-    '1': __webpack_require__(114),
-    '2': __webpack_require__(115)
-  },
-  'italic': __webpack_require__(116),
-  'image': __webpack_require__(117),
-  'indent': {
-    '+1': __webpack_require__(118),
-    '-1': __webpack_require__(119)
-  },
-  'link': __webpack_require__(120),
-  'list': {
-    'ordered': __webpack_require__(121),
-    'bullet': __webpack_require__(122),
-    'check': __webpack_require__(123)
-  },
-  'script': {
-    'sub': __webpack_require__(124),
-    'super': __webpack_require__(125)
-  },
-  'strike': __webpack_require__(126),
-  'underline': __webpack_require__(127),
-  'video': __webpack_require__(128)
-};
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getLastChangeIndex = exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _parchment = __webpack_require__(0);
-
-var _parchment2 = _interopRequireDefault(_parchment);
-
-var _quill = __webpack_require__(5);
-
-var _quill2 = _interopRequireDefault(_quill);
-
-var _module = __webpack_require__(9);
-
-var _module2 = _interopRequireDefault(_module);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var History = function (_Module) {
-  _inherits(History, _Module);
-
-  function History(quill, options) {
-    _classCallCheck(this, History);
-
-    var _this = _possibleConstructorReturn(this, (History.__proto__ || Object.getPrototypeOf(History)).call(this, quill, options));
-
-    _this.lastRecorded = 0;
-    _this.ignoreChange = false;
-    _this.clear();
-    _this.quill.on(_quill2.default.events.EDITOR_CHANGE, function (eventName, delta, oldDelta, source) {
-      if (eventName !== _quill2.default.events.TEXT_CHANGE || _this.ignoreChange) return;
-      if (!_this.options.userOnly || source === _quill2.default.sources.USER) {
-        _this.record(delta, oldDelta);
-      } else {
-        _this.transform(delta);
-      }
-    });
-    _this.quill.keyboard.addBinding({ key: 'Z', shortKey: true }, _this.undo.bind(_this));
-    _this.quill.keyboard.addBinding({ key: 'Z', shortKey: true, shiftKey: true }, _this.redo.bind(_this));
-    if (/Win/i.test(navigator.platform)) {
-      _this.quill.keyboard.addBinding({ key: 'Y', shortKey: true }, _this.redo.bind(_this));
-    }
-    return _this;
-  }
-
-  _createClass(History, [{
-    key: 'change',
-    value: function change(source, dest) {
-      if (this.stack[source].length === 0) return;
-      var delta = this.stack[source].pop();
-      this.stack[dest].push(delta);
-      this.lastRecorded = 0;
-      this.ignoreChange = true;
-      this.quill.updateContents(delta[source], _quill2.default.sources.USER);
-      this.ignoreChange = false;
-      var index = getLastChangeIndex(delta[source]);
-      this.quill.setSelection(index);
-    }
-  }, {
-    key: 'clear',
-    value: function clear() {
-      this.stack = { undo: [], redo: [] };
-    }
-  }, {
-    key: 'cutoff',
-    value: function cutoff() {
-      this.lastRecorded = 0;
-    }
-  }, {
-    key: 'record',
-    value: function record(changeDelta, oldDelta) {
-      if (changeDelta.ops.length === 0) return;
-      this.stack.redo = [];
-      var undoDelta = this.quill.getContents().diff(oldDelta);
-      var timestamp = Date.now();
-      if (this.lastRecorded + this.options.delay > timestamp && this.stack.undo.length > 0) {
-        var delta = this.stack.undo.pop();
-        undoDelta = undoDelta.compose(delta.undo);
-        changeDelta = delta.redo.compose(changeDelta);
-      } else {
-        this.lastRecorded = timestamp;
-      }
-      this.stack.undo.push({
-        redo: changeDelta,
-        undo: undoDelta
-      });
-      if (this.stack.undo.length > this.options.maxStack) {
-        this.stack.undo.shift();
-      }
-    }
-  }, {
-    key: 'redo',
-    value: function redo() {
-      this.change('redo', 'undo');
-    }
-  }, {
-    key: 'transform',
-    value: function transform(delta) {
-      this.stack.undo.forEach(function (change) {
-        change.undo = delta.transform(change.undo, true);
-        change.redo = delta.transform(change.redo, true);
-      });
-      this.stack.redo.forEach(function (change) {
-        change.undo = delta.transform(change.undo, true);
-        change.redo = delta.transform(change.redo, true);
-      });
-    }
-  }, {
-    key: 'undo',
-    value: function undo() {
-      this.change('undo', 'redo');
-    }
-  }]);
-
-  return History;
-}(_module2.default);
-
-History.DEFAULTS = {
-  delay: 1000,
-  maxStack: 100,
-  userOnly: false
-};
-
-function endsWithNewlineChange(delta) {
-  var lastOp = delta.ops[delta.ops.length - 1];
-  if (lastOp == null) return false;
-  if (lastOp.insert != null) {
-    return typeof lastOp.insert === 'string' && lastOp.insert.endsWith('\n');
-  }
-  if (lastOp.attributes != null) {
-    return Object.keys(lastOp.attributes).some(function (attr) {
-      return _parchment2.default.query(attr, _parchment2.default.Scope.BLOCK) != null;
-    });
-  }
-  return false;
-}
-
-function getLastChangeIndex(delta) {
-  var deleteLength = delta.reduce(function (length, op) {
-    length += op.delete || 0;
-    return length;
-  }, 0);
-  var changeIndex = delta.length() - deleteLength;
-  if (endsWithNewlineChange(delta)) {
-    changeIndex -= 1;
-  }
-  return changeIndex;
-}
-
-exports.default = History;
-exports.getLastChangeIndex = getLastChangeIndex;
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.default = exports.BaseTooltip = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -7751,6 +7224,533 @@ function fillSelect(select, values) {
 
 exports.BaseTooltip = BaseTooltip;
 exports.default = BaseTheme;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+var _text = __webpack_require__(7);
+
+var _text2 = _interopRequireDefault(_text);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var GUARD_TEXT = '\uFEFF';
+
+var Embed = function (_Parchment$Embed) {
+  _inherits(Embed, _Parchment$Embed);
+
+  function Embed(node) {
+    _classCallCheck(this, Embed);
+
+    var _this = _possibleConstructorReturn(this, (Embed.__proto__ || Object.getPrototypeOf(Embed)).call(this, node));
+
+    _this.contentNode = document.createElement('span');
+    _this.contentNode.setAttribute('contenteditable', false);
+    [].slice.call(_this.domNode.childNodes).forEach(function (childNode) {
+      _this.contentNode.appendChild(childNode);
+    });
+    _this.leftGuard = document.createTextNode(GUARD_TEXT);
+    _this.rightGuard = document.createTextNode(GUARD_TEXT);
+    _this.domNode.appendChild(_this.leftGuard);
+    _this.domNode.appendChild(_this.contentNode);
+    _this.domNode.appendChild(_this.rightGuard);
+    return _this;
+  }
+
+  _createClass(Embed, [{
+    key: 'index',
+    value: function index(node, offset) {
+      if (node === this.leftGuard) return 0;
+      if (node === this.rightGuard) return 1;
+      return _get(Embed.prototype.__proto__ || Object.getPrototypeOf(Embed.prototype), 'index', this).call(this, node, offset);
+    }
+  }, {
+    key: 'restore',
+    value: function restore(node) {
+      var range = void 0,
+          textNode = void 0;
+      var text = node.data.split(GUARD_TEXT).join('');
+      if (node === this.leftGuard) {
+        if (this.prev instanceof _text2.default) {
+          var prevLength = this.prev.length();
+          this.prev.insertAt(prevLength, text);
+          range = {
+            startNode: this.prev.domNode,
+            startOffset: prevLength + text.length
+          };
+        } else {
+          textNode = document.createTextNode(text);
+          this.parent.insertBefore(_parchment2.default.create(textNode), this);
+          range = {
+            startNode: textNode,
+            startOffset: text.length
+          };
+        }
+      } else if (node === this.rightGuard) {
+        if (this.next instanceof _text2.default) {
+          this.next.insertAt(0, text);
+          range = {
+            startNode: this.next.domNode,
+            startOffset: text.length
+          };
+        } else {
+          textNode = document.createTextNode(text);
+          this.parent.insertBefore(_parchment2.default.create(textNode), this.next);
+          range = {
+            startNode: textNode,
+            startOffset: text.length
+          };
+        }
+      }
+      node.data = GUARD_TEXT;
+      return range;
+    }
+  }, {
+    key: 'update',
+    value: function update(mutations, context) {
+      var _this2 = this;
+
+      mutations.forEach(function (mutation) {
+        if (mutation.type === 'characterData' && (mutation.target === _this2.leftGuard || mutation.target === _this2.rightGuard)) {
+          var range = _this2.restore(mutation.target);
+          if (range) context.range = range;
+        }
+      });
+    }
+  }]);
+
+  return Embed;
+}(_parchment2.default.Embed);
+
+exports.default = Embed;
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AlignStyle = exports.AlignClass = exports.AlignAttribute = undefined;
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var config = {
+  scope: _parchment2.default.Scope.BLOCK,
+  whitelist: ['right', 'center', 'justify']
+};
+
+var AlignAttribute = new _parchment2.default.Attributor.Attribute('align', 'align', config);
+var AlignClass = new _parchment2.default.Attributor.Class('align', 'ql-align', config);
+var AlignStyle = new _parchment2.default.Attributor.Style('align', 'text-align', config);
+
+exports.AlignAttribute = AlignAttribute;
+exports.AlignClass = AlignClass;
+exports.AlignStyle = AlignStyle;
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.BackgroundStyle = exports.BackgroundClass = undefined;
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+var _color = __webpack_require__(30);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var BackgroundClass = new _parchment2.default.Attributor.Class('background', 'ql-bg', {
+  scope: _parchment2.default.Scope.INLINE
+});
+var BackgroundStyle = new _color.ColorAttributor('background', 'background-color', {
+  scope: _parchment2.default.Scope.INLINE
+});
+
+exports.BackgroundClass = BackgroundClass;
+exports.BackgroundStyle = BackgroundStyle;
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DirectionStyle = exports.DirectionClass = exports.DirectionAttribute = undefined;
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var config = {
+  scope: _parchment2.default.Scope.BLOCK,
+  whitelist: ['rtl']
+};
+
+var DirectionAttribute = new _parchment2.default.Attributor.Attribute('direction', 'dir', config);
+var DirectionClass = new _parchment2.default.Attributor.Class('direction', 'ql-direction', config);
+var DirectionStyle = new _parchment2.default.Attributor.Style('direction', 'direction', config);
+
+exports.DirectionAttribute = DirectionAttribute;
+exports.DirectionClass = DirectionClass;
+exports.DirectionStyle = DirectionStyle;
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FontClass = exports.FontStyle = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var config = {
+  scope: _parchment2.default.Scope.INLINE,
+  whitelist: ['serif', 'monospace']
+};
+
+var FontClass = new _parchment2.default.Attributor.Class('font', 'ql-font', config);
+
+var FontStyleAttributor = function (_Parchment$Attributor) {
+  _inherits(FontStyleAttributor, _Parchment$Attributor);
+
+  function FontStyleAttributor() {
+    _classCallCheck(this, FontStyleAttributor);
+
+    return _possibleConstructorReturn(this, (FontStyleAttributor.__proto__ || Object.getPrototypeOf(FontStyleAttributor)).apply(this, arguments));
+  }
+
+  _createClass(FontStyleAttributor, [{
+    key: 'value',
+    value: function value(node) {
+      return _get(FontStyleAttributor.prototype.__proto__ || Object.getPrototypeOf(FontStyleAttributor.prototype), 'value', this).call(this, node).replace(/["']/g, '');
+    }
+  }]);
+
+  return FontStyleAttributor;
+}(_parchment2.default.Attributor.Style);
+
+var FontStyle = new FontStyleAttributor('font', 'font-family', config);
+
+exports.FontStyle = FontStyle;
+exports.FontClass = FontClass;
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SizeStyle = exports.SizeClass = undefined;
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SizeClass = new _parchment2.default.Attributor.Class('size', 'ql-size', {
+  scope: _parchment2.default.Scope.INLINE,
+  whitelist: ['small', 'large', 'huge']
+});
+var SizeStyle = new _parchment2.default.Attributor.Style('size', 'font-size', {
+  scope: _parchment2.default.Scope.INLINE,
+  whitelist: ['10px', '18px', '32px']
+});
+
+exports.SizeClass = SizeClass;
+exports.SizeStyle = SizeStyle;
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+  'align': {
+    '': __webpack_require__(98),
+    'center': __webpack_require__(99),
+    'right': __webpack_require__(100),
+    'justify': __webpack_require__(101)
+  },
+  'background': __webpack_require__(102),
+  'blockquote': __webpack_require__(103),
+  'bold': __webpack_require__(104),
+  'clean': __webpack_require__(105),
+  'code': __webpack_require__(80),
+  'code-block': __webpack_require__(80),
+  'color': __webpack_require__(106),
+  'direction': {
+    '': __webpack_require__(107),
+    'rtl': __webpack_require__(108)
+  },
+  'float': {
+    'center': __webpack_require__(109),
+    'full': __webpack_require__(110),
+    'left': __webpack_require__(111),
+    'right': __webpack_require__(112)
+  },
+  'formula': __webpack_require__(113),
+  'header': {
+    '1': __webpack_require__(114),
+    '2': __webpack_require__(115)
+  },
+  'italic': __webpack_require__(116),
+  'image': __webpack_require__(117),
+  'indent': {
+    '+1': __webpack_require__(118),
+    '-1': __webpack_require__(119)
+  },
+  'link': __webpack_require__(120),
+  'list': {
+    'ordered': __webpack_require__(121),
+    'bullet': __webpack_require__(122),
+    'check': __webpack_require__(123)
+  },
+  'script': {
+    'sub': __webpack_require__(124),
+    'super': __webpack_require__(125)
+  },
+  'strike': __webpack_require__(126),
+  'underline': __webpack_require__(127),
+  'video': __webpack_require__(128)
+};
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getLastChangeIndex = exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _parchment = __webpack_require__(0);
+
+var _parchment2 = _interopRequireDefault(_parchment);
+
+var _quill = __webpack_require__(5);
+
+var _quill2 = _interopRequireDefault(_quill);
+
+var _module = __webpack_require__(9);
+
+var _module2 = _interopRequireDefault(_module);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var History = function (_Module) {
+  _inherits(History, _Module);
+
+  function History(quill, options) {
+    _classCallCheck(this, History);
+
+    var _this = _possibleConstructorReturn(this, (History.__proto__ || Object.getPrototypeOf(History)).call(this, quill, options));
+
+    _this.lastRecorded = 0;
+    _this.ignoreChange = false;
+    _this.clear();
+    _this.quill.on(_quill2.default.events.EDITOR_CHANGE, function (eventName, delta, oldDelta, source) {
+      if (eventName !== _quill2.default.events.TEXT_CHANGE || _this.ignoreChange) return;
+      if (!_this.options.userOnly || source === _quill2.default.sources.USER) {
+        _this.record(delta, oldDelta);
+      } else {
+        _this.transform(delta);
+      }
+    });
+    _this.quill.keyboard.addBinding({ key: 'Z', shortKey: true }, _this.undo.bind(_this));
+    _this.quill.keyboard.addBinding({ key: 'Z', shortKey: true, shiftKey: true }, _this.redo.bind(_this));
+    if (/Win/i.test(navigator.platform)) {
+      _this.quill.keyboard.addBinding({ key: 'Y', shortKey: true }, _this.redo.bind(_this));
+    }
+    return _this;
+  }
+
+  _createClass(History, [{
+    key: 'change',
+    value: function change(source, dest) {
+      if (this.stack[source].length === 0) return;
+      var delta = this.stack[source].pop();
+      this.stack[dest].push(delta);
+      this.lastRecorded = 0;
+      this.ignoreChange = true;
+      this.quill.updateContents(delta[source], _quill2.default.sources.USER);
+      this.ignoreChange = false;
+      var index = getLastChangeIndex(delta[source]);
+      this.quill.setSelection(index);
+    }
+  }, {
+    key: 'clear',
+    value: function clear() {
+      this.stack = { undo: [], redo: [] };
+    }
+  }, {
+    key: 'cutoff',
+    value: function cutoff() {
+      this.lastRecorded = 0;
+    }
+  }, {
+    key: 'record',
+    value: function record(changeDelta, oldDelta) {
+      if (changeDelta.ops.length === 0) return;
+      this.stack.redo = [];
+      var undoDelta = this.quill.getContents().diff(oldDelta);
+      var timestamp = Date.now();
+      if (this.lastRecorded + this.options.delay > timestamp && this.stack.undo.length > 0) {
+        var delta = this.stack.undo.pop();
+        undoDelta = undoDelta.compose(delta.undo);
+        changeDelta = delta.redo.compose(changeDelta);
+      } else {
+        this.lastRecorded = timestamp;
+      }
+      this.stack.undo.push({
+        redo: changeDelta,
+        undo: undoDelta
+      });
+      if (this.stack.undo.length > this.options.maxStack) {
+        this.stack.undo.shift();
+      }
+    }
+  }, {
+    key: 'redo',
+    value: function redo() {
+      this.change('redo', 'undo');
+    }
+  }, {
+    key: 'transform',
+    value: function transform(delta) {
+      this.stack.undo.forEach(function (change) {
+        change.undo = delta.transform(change.undo, true);
+        change.redo = delta.transform(change.redo, true);
+      });
+      this.stack.redo.forEach(function (change) {
+        change.undo = delta.transform(change.undo, true);
+        change.redo = delta.transform(change.redo, true);
+      });
+    }
+  }, {
+    key: 'undo',
+    value: function undo() {
+      this.change('undo', 'redo');
+    }
+  }]);
+
+  return History;
+}(_module2.default);
+
+History.DEFAULTS = {
+  delay: 1000,
+  maxStack: 100,
+  userOnly: false
+};
+
+function endsWithNewlineChange(delta) {
+  var lastOp = delta.ops[delta.ops.length - 1];
+  if (lastOp == null) return false;
+  if (lastOp.insert != null) {
+    return typeof lastOp.insert === 'string' && lastOp.insert.endsWith('\n');
+  }
+  if (lastOp.attributes != null) {
+    return Object.keys(lastOp.attributes).some(function (attr) {
+      return _parchment2.default.query(attr, _parchment2.default.Scope.BLOCK) != null;
+    });
+  }
+  return false;
+}
+
+function getLastChangeIndex(delta) {
+  var deleteLength = delta.reduce(function (length, op) {
+    length += op.delete || 0;
+    return length;
+  }, 0);
+  var changeIndex = delta.length() - deleteLength;
+  if (endsWithNewlineChange(delta)) {
+    changeIndex -= 1;
+  }
+  return changeIndex;
+}
+
+exports.default = History;
+exports.getLastChangeIndex = getLastChangeIndex;
 
 /***/ }),
 /* 57 */
@@ -10021,9 +10021,9 @@ var _module = __webpack_require__(9);
 
 var _module2 = _interopRequireDefault(_module);
 
-var _align = __webpack_require__(49);
+var _align = __webpack_require__(50);
 
-var _background = __webpack_require__(50);
+var _background = __webpack_require__(51);
 
 var _code = __webpack_require__(14);
 
@@ -10031,11 +10031,11 @@ var _code2 = _interopRequireDefault(_code);
 
 var _color = __webpack_require__(30);
 
-var _direction = __webpack_require__(51);
+var _direction = __webpack_require__(52);
 
-var _font = __webpack_require__(52);
+var _font = __webpack_require__(53);
 
-var _size = __webpack_require__(53);
+var _size = __webpack_require__(54);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -11032,7 +11032,7 @@ var _emitter = __webpack_require__(8);
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
-var _base = __webpack_require__(56);
+var _base = __webpack_require__(48);
 
 var _base2 = _interopRequireDefault(_base);
 
@@ -11042,7 +11042,7 @@ var _link2 = _interopRequireDefault(_link);
 
 var _selection = __webpack_require__(16);
 
-var _icons = __webpack_require__(54);
+var _icons = __webpack_require__(55);
 
 var _icons2 = _interopRequireDefault(_icons);
 
@@ -11203,9 +11203,9 @@ var _core = __webpack_require__(33);
 
 var _core2 = _interopRequireDefault(_core);
 
-var _align = __webpack_require__(49);
+var _align = __webpack_require__(50);
 
-var _direction = __webpack_require__(51);
+var _direction = __webpack_require__(52);
 
 var _indent = __webpack_require__(86);
 
@@ -11221,13 +11221,13 @@ var _list = __webpack_require__(89);
 
 var _list2 = _interopRequireDefault(_list);
 
-var _background = __webpack_require__(50);
+var _background = __webpack_require__(51);
 
 var _color = __webpack_require__(30);
 
-var _font = __webpack_require__(52);
+var _font = __webpack_require__(53);
 
-var _size = __webpack_require__(53);
+var _size = __webpack_require__(54);
 
 var _bold = __webpack_require__(78);
 
@@ -11277,7 +11277,7 @@ var _toolbar = __webpack_require__(79);
 
 var _toolbar2 = _interopRequireDefault(_toolbar);
 
-var _icons = __webpack_require__(54);
+var _icons = __webpack_require__(55);
 
 var _icons2 = _interopRequireDefault(_icons);
 
@@ -11296,6 +11296,10 @@ var _iconPicker2 = _interopRequireDefault(_iconPicker);
 var _tooltip = __webpack_require__(83);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
+
+var _base = __webpack_require__(48);
+
+var _base2 = _interopRequireDefault(_base);
 
 var _bubble = __webpack_require__(130);
 
@@ -11360,9 +11364,11 @@ _core2.default.register({
   'modules/syntax': _syntax2.default,
   'modules/toolbar': _toolbar2.default,
 
+  'themes/base': _base2.default,
   'themes/bubble': _bubble2.default,
   'themes/snow': _snow2.default,
 
+  'themes/base/tooltip': _base.BaseTooltip,
   'themes/bubble/tooltip': _bubble.BubbleTooltip,
   'themes/snow/tooltip': _snow.SnowTooltip,
 
@@ -12125,7 +12131,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _embed = __webpack_require__(48);
+var _embed = __webpack_require__(49);
 
 var _embed2 = _interopRequireDefault(_embed);
 
@@ -12571,13 +12577,13 @@ var _emitter = __webpack_require__(8);
 
 var _emitter2 = _interopRequireDefault(_emitter);
 
-var _base = __webpack_require__(56);
+var _base = __webpack_require__(48);
 
 var _base2 = _interopRequireDefault(_base);
 
 var _selection = __webpack_require__(16);
 
-var _icons = __webpack_require__(54);
+var _icons = __webpack_require__(55);
 
 var _icons2 = _interopRequireDefault(_icons);
 
@@ -15716,7 +15722,7 @@ var _core = __webpack_require__(33);
 
 var _core2 = _interopRequireDefault(_core);
 
-var _history = __webpack_require__(55);
+var _history = __webpack_require__(56);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16290,7 +16296,7 @@ var _core = __webpack_require__(33);
 
 var _core2 = _interopRequireDefault(_core);
 
-var _base = __webpack_require__(56);
+var _base = __webpack_require__(48);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

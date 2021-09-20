@@ -5513,7 +5513,7 @@ var _cursor = __webpack_require__(28);
 
 var _cursor2 = _interopRequireDefault(_cursor);
 
-var _embed = __webpack_require__(48);
+var _embed = __webpack_require__(49);
 
 var _embed2 = _interopRequireDefault(_embed);
 
@@ -5533,7 +5533,7 @@ var _clipboard = __webpack_require__(77);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
-var _history = __webpack_require__(55);
+var _history = __webpack_require__(56);
 
 var _history2 = _interopRequireDefault(_history);
 
@@ -6561,7 +6561,8 @@ Theme.themes = {
 exports.default = Theme;
 
 /***/ }),
-/* 48 */
+/* 48 */,
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6682,7 +6683,7 @@ var Embed = function (_Parchment$Embed) {
 exports.default = Embed;
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6713,7 +6714,7 @@ exports.AlignClass = AlignClass;
 exports.AlignStyle = AlignStyle;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6743,7 +6744,7 @@ exports.BackgroundClass = BackgroundClass;
 exports.BackgroundStyle = BackgroundStyle;
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6774,7 +6775,7 @@ exports.DirectionClass = DirectionClass;
 exports.DirectionStyle = DirectionStyle;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6833,7 +6834,7 @@ exports.FontStyle = FontStyle;
 exports.FontClass = FontClass;
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6863,8 +6864,8 @@ exports.SizeClass = SizeClass;
 exports.SizeStyle = SizeStyle;
 
 /***/ }),
-/* 54 */,
-/* 55 */
+/* 55 */,
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7032,7 +7033,6 @@ exports.default = History;
 exports.getLastChangeIndex = getLastChangeIndex;
 
 /***/ }),
-/* 56 */,
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9301,9 +9301,9 @@ var _module = __webpack_require__(9);
 
 var _module2 = _interopRequireDefault(_module);
 
-var _align = __webpack_require__(49);
+var _align = __webpack_require__(50);
 
-var _background = __webpack_require__(50);
+var _background = __webpack_require__(51);
 
 var _code = __webpack_require__(14);
 
@@ -9311,11 +9311,11 @@ var _code2 = _interopRequireDefault(_code);
 
 var _color = __webpack_require__(30);
 
-var _direction = __webpack_require__(51);
+var _direction = __webpack_require__(52);
 
-var _font = __webpack_require__(52);
+var _font = __webpack_require__(53);
 
-var _size = __webpack_require__(53);
+var _size = __webpack_require__(54);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
