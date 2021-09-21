@@ -12690,9 +12690,12 @@ var BubbleTooltip = function (_BaseTooltip) {
       var _this3 = this;
 
       _get(BubbleTooltip.prototype.__proto__ || Object.getPrototypeOf(BubbleTooltip.prototype), 'listen', this).call(this);
-      this.root.querySelector('.ql-close').addEventListener('click', function () {
-        _this3.root.classList.remove('ql-editing');
-      });
+      var close = this.root.querySelector('.ql-close');
+      if (close) {
+        close.addEventListener('click', function () {
+          _this3.root.classList.remove('ql-editing');
+        });
+      }
       this.quill.on(_emitter2.default.events.SCROLL_OPTIMIZE, function () {
         // Let selection be restored by toolbar handlers before repositioning
         setTimeout(function () {
