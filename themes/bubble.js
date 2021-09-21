@@ -72,9 +72,12 @@ class BubbleTooltip extends BaseTooltip {
 
   listen() {
     super.listen();
-    this.root.querySelector('.ql-close').addEventListener('click', () => {
-      this.root.classList.remove('ql-editing');
-    });
+    let close = this.root.querySelector('.ql-close');
+    if (close) {
+      close.addEventListener('click', () => {
+        this.root.classList.remove('ql-editing');
+      });
+    }
     this.quill.on(Emitter.events.SCROLL_OPTIMIZE, () => {
       // Let selection be restored by toolbar handlers before repositioning
       setTimeout(() => {
