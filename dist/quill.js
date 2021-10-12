@@ -10578,6 +10578,12 @@ var Toolbar = function (_Module) {
       this.handlers[format] = handler;
     }
   }, {
+    key: 'executeHandler',
+    value: function executeHandler(format, value) {
+      var fn = this.handlers[format].action || this.handlers[format];
+      return fn.call(this, value);
+    }
+  }, {
     key: 'attach',
     value: function attach(input) {
       var _this2 = this;
@@ -10626,7 +10632,7 @@ var Toolbar = function (_Module) {
             range = _quill$selection$getR2[0];
 
         if (_this2.handlers[format] != null) {
-          _this2.handlers[format].call(_this2, value);
+          _this2.executeHandler(format, value);
         } else if (_parchment2.default.query(format).prototype instanceof _parchment2.default.Embed) {
           value = prompt('Enter ' + format);
           if (!value) return;
@@ -10643,6 +10649,7 @@ var Toolbar = function (_Module) {
     key: 'update',
     value: function update(range) {
       var formats = range == null ? {} : this.quill.getFormat(range);
+      var toolbar = this;
       this.controls.forEach(function (pair) {
         var _pair = _slicedToArray(pair, 2),
             format = _pair[0],
@@ -10670,16 +10677,26 @@ var Toolbar = function (_Module) {
         } else {
           if (range == null) {
             input.classList.remove('ql-active');
-          } else if (input.hasAttribute('value')) {
-            // both being null should match (default values)
-            // '1' should match with 1 (headers)
-            var isActive = formats[format] === input.getAttribute('value') || formats[format] != null && formats[format].toString() === input.getAttribute('value') || formats[format] == null && !input.getAttribute('value');
-            input.classList.toggle('ql-active', isActive);
           } else {
-            input.classList.toggle('ql-active', formats[format] != null);
+            var isActive = isHandlerActive(format, input);
+            input.classList.toggle('ql-active', isActive);
           }
         }
-      });
+
+        function isHandlerActive(format, input) {
+          if (toolbar.handlers[format] && toolbar.handlers[format].isActive) {
+            return toolbar.handlers[format].isActive(formats);
+          }
+
+          if (input.hasAttribute('value')) {
+            // both being null should match (default values)
+            // '1' should match with 1 (headers)
+            return formats[format] === input.getAttribute('value') || formats[format] != null && formats[format].toString() === input.getAttribute('value') || formats[format] == null && !input.getAttribute('value');
+          } else {
+            return formats[format] != null;
+          }
+        }
+      }, this);
     }
   }]);
 
