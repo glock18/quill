@@ -4926,6 +4926,7 @@ Keyboard.DEFAULTS = {
 
         if (offset > length) return true;
         var value = void 0;
+        var prefix = context.prefix.trim();
         switch (context.prefix.trim()) {
           case '[]':case '[ ]':
             value = 'unchecked';
@@ -4937,7 +4938,7 @@ Keyboard.DEFAULTS = {
             value = 'bullet';
             break;
           default:
-            value = 'ordered';
+            value = parseInt(prefix) ? { type: 'ordered', start: parseInt(prefix) } : 'ordered';
         }
         this.quill.insertText(range.index, ' ', _quill2.default.sources.USER);
         this.quill.history.cutoff();
@@ -11663,17 +11664,27 @@ var List = function (_Container) {
   _createClass(List, null, [{
     key: 'create',
     value: function create(value) {
-      var tagName = value === 'ordered' ? 'OL' : 'UL';
+      var type = value && value.type || value;
+      var start = value && value.start || null;
+      var tagName = type === 'ordered' ? 'OL' : 'UL';
       var node = _get(List.__proto__ || Object.getPrototypeOf(List), 'create', this).call(this, tagName);
       if (value === 'checked' || value === 'unchecked') {
         node.setAttribute('data-checked', value === 'checked');
+      }
+      if (start) {
+        node.setAttribute('start', start);
       }
       return node;
     }
   }, {
     key: 'formats',
     value: function formats(domNode) {
-      if (domNode.tagName === 'OL') return 'ordered';
+      if (domNode.tagName === 'OL') {
+        return {
+          type: 'ordered',
+          start: domNode.hasAttribute('start') ? domNode.getAttribute('start') : null
+        };
+      }
       if (domNode.tagName === 'UL') {
         if (domNode.hasAttribute('data-checked')) {
           return domNode.getAttribute('data-checked') === 'true' ? 'checked' : 'unchecked';

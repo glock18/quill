@@ -256,6 +256,7 @@ Keyboard.DEFAULTS = {
         let [line, offset] = this.quill.getLine(range.index);
         if (offset > length) return true;
         let value;
+        let prefix = context.prefix.trim();
         switch (context.prefix.trim()) {
           case '[]': case '[ ]':
             value = 'unchecked';
@@ -267,7 +268,7 @@ Keyboard.DEFAULTS = {
             value = 'bullet';
             break;
           default:
-            value = 'ordered';
+            value = parseInt(prefix) ? { type: 'ordered', start: parseInt(prefix) } : 'ordered';
         }
         this.quill.insertText(range.index, ' ', Quill.sources.USER);
         this.quill.history.cutoff();
