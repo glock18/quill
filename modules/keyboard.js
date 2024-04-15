@@ -476,7 +476,7 @@ Keyboard.DEFAULTS = {
         const [line, offset] = this.quill.getLine(range.index);
         if (offset > length) return true;
         let value;
-        let prefix = context.prefix.trim();
+        const prefix = context.prefix.trim();
         switch (context.prefix.trim()) {
           case '[]':
           case '[ ]':
@@ -490,7 +490,9 @@ Keyboard.DEFAULTS = {
             value = 'bullet';
             break;
           default:
-            value = parseInt(prefix) ? { type: 'ordered', start: parseInt(prefix) } : 'ordered';
+            value = parseInt(prefix) // eslint-disable-line radix
+              ? `ordered,${parseInt(prefix, 10)}`
+              : 'ordered';
         }
         this.quill.insertText(range.index, ' ', Quill.sources.USER);
         this.quill.history.cutoff();

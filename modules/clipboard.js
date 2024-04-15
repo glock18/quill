@@ -88,7 +88,7 @@ class Clipboard extends Module {
     if (!html) {
       return new Delta().insert(text || '');
     }
-    const delta = this.convertHTML(html.replace(/\>\r?\n +\</g, '><'));
+    const delta = this.convertHTML(html.replace(/>\r?\n +</g, '><'));
     // Remove trailing newline
     if (
       deltaEndsWith(delta, '\n') &&
@@ -117,7 +117,7 @@ class Clipboard extends Module {
   }
 
   dangerouslyPasteHTML(index, html, source = Quill.sources.API) {
-  if (typeof index === 'string') {
+    if (typeof index === 'string') {
       const delta = this.convert({ html: index, text: '' });
       this.quill.setContents(delta, html);
       this.quill.setSelection(0, Quill.sources.SILENT);
@@ -155,7 +155,8 @@ class Clipboard extends Module {
     if (!html && files.length > 0) {
       this.quill.uploader.upload(range, files);
       return;
-    } else if (html && files.length > 0) {
+    }
+    if (html && files.length > 0) {
       const doc = new DOMParser().parseFromString(html, 'text/html');
       if (
         doc.body.childElementCount === 1 &&

@@ -15,7 +15,9 @@ describe('Link', function() {
     expect(editor.scroll.domNode).toEqualHTML(
       '<p>0<a href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>',
     );
-    expect(editor.scroll.domNode).toEqualHTML('<p>0<a href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>');
+    expect(editor.scroll.domNode).toEqualHTML(
+      '<p>0<a href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>',
+    );
   });
 
   it('add invalid', function() {
@@ -41,22 +43,33 @@ describe('Link', function() {
     expect(editor.scroll.domNode).toEqualHTML(
       '<p>0<a href="about:blank" target="_blank" rel="noopener noreferrer">12</a>3</p>',
     );
-    expect(editor.scroll.domNode).toEqualHTML('<p>0<a href="about:blank" target="_blank" rel="noopener noreferrer">12</a>3</p>');
+    expect(editor.scroll.domNode).toEqualHTML(
+      '<p>0<a href="about:blank" target="_blank" rel="noopener noreferrer">12</a>3</p>',
+    );
   });
 
   it('change', function() {
-    let editor = this.initialize(Editor, '<p>0<a href="https://github.com" target="_blank" rel="noopener noreferrer">12</a>3</p>');
-    editor.formatText(1, 2, { link:  'https://quilljs.com' });
-    expect(editor.getDelta()).toEqual(new Delta()
-      .insert('0')
-      .insert('12', { link: 'https://quilljs.com' })
-      .insert('3\n')
+    const editor = this.initialize(
+      Editor,
+      '<p>0<a href="https://github.com" target="_blank" rel="noopener noreferrer">12</a>3</p>',
     );
-    expect(editor.scroll.domNode).toEqualHTML('<p>0<a href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>');
+    editor.formatText(1, 2, { link: 'https://quilljs.com' });
+    expect(editor.getDelta()).toEqual(
+      new Delta()
+        .insert('0')
+        .insert('12', { link: 'https://quilljs.com' })
+        .insert('3\n'),
+    );
+    expect(editor.scroll.domNode).toEqualHTML(
+      '<p>0<a href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>',
+    );
   });
 
   it('remove', function() {
-    let editor = this.initialize(Editor, '<p>0<a class="ql-size-large" href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>');
+    const editor = this.initialize(
+      Editor,
+      '<p>0<a class="ql-size-large" href="https://quilljs.com" target="_blank" rel="noopener noreferrer">12</a>3</p>',
+    );
     editor.formatText(1, 2, { link: false });
     const delta = new Delta()
       .insert('0')

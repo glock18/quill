@@ -8,7 +8,8 @@ ListContainer.tagName = 'OL';
 
 class ListItem extends Block {
   static create(value) {
-    const isOrderedList = typeof value === 'string' && value.indexOf('ordered') === 0;
+    const isOrderedList =
+      typeof value === 'string' && value.indexOf('ordered') === 0;
     const start = isOrderedList ? value.split(',').pop() : null;
     const node = super.create();
     node.setAttribute('data-list', value);
@@ -22,14 +23,17 @@ class ListItem extends Block {
   static formats(domNode) {
     // return domNode.getAttribute('data-list') || undefined;
     if (domNode.parentNode && domNode.parentNode.tagName === 'OL') {
-      return 'ordered' + (domNode.hasAttribute('start') ? ',' + domNode.getAttribute('start') : '')
+      return `ordered${
+        domNode.hasAttribute('start') ? `,${domNode.getAttribute('start')}` : ''
+      }`;
     }
     if (domNode.parentNode && domNode.parentNode.tagName === 'UL') {
       if (domNode.hasAttribute('data-checked')) {
-        return domNode.getAttribute('data-checked') === 'true' ? 'checked' : 'unchecked';
-      } else {
-        return 'bullet';
+        return domNode.getAttribute('data-checked') === 'true'
+          ? 'checked'
+          : 'unchecked';
       }
+      return 'bullet';
     }
     return undefined;
   }

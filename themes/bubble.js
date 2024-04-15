@@ -51,7 +51,7 @@ class BubbleTooltip extends BaseTooltip {
 
   listen() {
     super.listen();
-    let close = this.root.querySelector('.ql-close');
+    const close = this.root.querySelector('.ql-close');
     if (close) {
       close.addEventListener('click', () => {
         this.root.classList.remove('ql-editing');

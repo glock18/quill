@@ -328,7 +328,8 @@ function combineFormats(formats, combined) {
 }
 
 function getListType(type) {
-  const tag = type === 'ordered' ? 'ol' : 'ul';
+  const tag =
+    typeof type === 'string' && type.indexOf('ordered') === 0 ? 'ol' : 'ul';
   switch (type) {
     case 'checked':
       return [tag, ' data-list="checked"'];

@@ -60,8 +60,15 @@ class BaseTheme extends Theme {
         document.body.removeEventListener('click', listener);
         return;
       }
-      if (this.tooltip != null && !this.tooltip.root.contains(e.target) &&
-        !(this.tooltip.textbox && document.activeElement === this.tooltip.textbox) && !this.quill.hasFocus()) {
+      if (
+        this.tooltip != null &&
+        !this.tooltip.root.contains(e.target) &&
+        !(
+          this.tooltip.textbox &&
+          document.activeElement === this.tooltip.textbox
+        ) &&
+        !this.quill.hasFocus()
+      ) {
         this.tooltip.hide();
       }
       if (this.pickers != null) {
@@ -220,7 +227,10 @@ class BaseTooltip extends Tooltip {
         this.textbox.value = '';
       }
       this.textbox.select();
-      this.textbox.setAttribute('placeholder', this.textbox.getAttribute(`data-${mode}`) || '');
+      this.textbox.setAttribute(
+        'placeholder',
+        this.textbox.getAttribute(`data-${mode}`) || '',
+      );
     }
     this.root.setAttribute('data-mode', mode);
   }
@@ -235,7 +245,7 @@ class BaseTooltip extends Tooltip {
     if (value === undefined && this.textbox) {
       value = this.textbox.value;
     }
-    switch(this.root.getAttribute('data-mode')) {
+    switch (this.root.getAttribute('data-mode')) {
       case 'link': {
         const { scrollTop } = this.quill.root;
         if (this.linkRange) {
