@@ -11,7 +11,7 @@ class ListItem extends Block {
     const isOrderedList =
       typeof value === 'string' && value.indexOf('ordered') === 0;
     const start = isOrderedList ? value.split(',').pop() : null;
-    const node = super.create();
+    const node = super.create(value);
     node.setAttribute('data-list', value);
 
     if (start) {
@@ -73,6 +73,6 @@ ListItem.blotName = 'list';
 ListItem.tagName = 'LI';
 
 ListContainer.allowedChildren = [ListItem];
-// ListItem.requiredContainer = ListContainer;
+ListItem.requiredContainer = ListContainer;
 
 export { ListContainer, ListItem as default };
